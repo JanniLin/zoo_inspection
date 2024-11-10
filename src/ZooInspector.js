@@ -18,7 +18,6 @@ class Inspection {
     this.zoo = zoo;
     this.imageRecognitionSystem = imageRecognitionSystem;
     this.inspectionStatuses = [];
-    this.zooWarningStatus = false;
   }
 
   runInspection() {
@@ -36,8 +35,8 @@ class Inspection {
   reportZooStatus() {
     const zooStatus = this.isZooInWarningStatus() ? Inspection.WARNING_STATUS : Inspection.OK_STATUS;
     this.reportStatus(Inspection.ZOO_STATUS_NAME, this.zoo.getId(), zooStatus);
-
   }
+
   isZooInWarningStatus() {
     return this.isNotEmptyInspectionStatuses();
   }
@@ -45,7 +44,6 @@ class Inspection {
   isNotEmptyInspectionStatuses() {
     return !!this.inspectionStatuses.length;
   }
-
 
   reportEnclosureWarningStatus(enclosure) {
     this.reportStatus(Inspection.ENCLOSURE_STATUS_NAME, enclosure.getId(), Inspection.WARNING_STATUS);
@@ -64,7 +62,7 @@ class Inspection {
     const enclosureStatus = this.imageRecognitionSystem.recognizeEnclosureStatus(enclosure, enclosureImage);
     if (this.isNotSafeEnclosure(enclosureStatus)) {
       this.respondToNotSafeEnclosure(enclosure);
-      this.reportNotSafeEnclosureStatus(enclosure);
+      this.reportEnclosureWarningStatus(enclosure);
     }
   }
 
@@ -72,11 +70,6 @@ class Inspection {
     this.zoo.closeEnclosure(enclosure);
     this.zoo.requestSecurityTo(enclosure);
     this.zoo.requestMaintenanceCrewTo(enclosure);
-  }
-
-  reportNotSafeEnclosureStatus(enclosure) {
-    this.reportEnclosureWarningStatus(enclosure);
-    this.zooWarningStatus = true;
   }
 
   isNotSafeEnclosure(enclosureStatus) {
@@ -88,21 +81,16 @@ class Inspection {
     const animalStatus = this.imageRecognitionSystem.recognizeAnimalStatus(enclosure.getAnimal(), animalImage);
     if (animalStatus.isAnimalSick()) {
       this.respondToSickAnimal(enclosure);
-      this.reportSickAnimalStatus(enclosure.getAnimal());
+      this.reportAnimalWarningStatus(enclosure.getAnimal());
     }
-  }
-
-  reportSickAnimalStatus(animal) {
-    this.reportAnimalWarningStatus(animal);
-    this.zooWarningStatus = true;
   }
 
   respondToSickAnimal(enclosure) {
     this.zoo.closeEnclosure(enclosure);
     this.zoo.requestVeterinaryTo(enclosure.getAnimal());
   }
-
 }
+
 Inspection.WARNING_STATUS = 'WARNING';
 Inspection.OK_STATUS = 'OK';
 Inspection.ZOO_STATUS_NAME = 'ZOO';
