@@ -36,6 +36,10 @@ class Inspection {
   reportZooStatus() {
     this.inspectionStatuses.push(`ZOO#${this.zoo.getId()}#${this.zooWarningStatus ? 'WARNING' : 'OK'}`);
   }
+  addWarningToStatuses(enclosure, isAnimal) {
+    this.inspectionStatuses.push(`${isAnimal ? 'ANIMAL' : 'ENCLOSURE'}#${isAnimal ? enclosure.getAnimal().getName() : enclosure.getId()}#WARNING`);
+  }
+
 
   inspectEnclosure(enclosure) {
     const enclosureImage = this.zoo.capturePictureOf(enclosure);
@@ -80,7 +84,4 @@ class Inspection {
     this.zoo.requestVeterinaryTo(enclosure.getAnimal());
   }
 
-  addWarningToStatuses(enclosure, isAnimal) {
-    this.inspectionStatuses.push(`${isAnimal ? 'ANIMAL' : 'ENCLOSURE'}#${isAnimal ? enclosure.getAnimal().getName() : enclosure.getId()}#WARNING`);
-  }
 }
