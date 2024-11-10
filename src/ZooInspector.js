@@ -39,12 +39,7 @@ class Inspection {
 
   }
 
-  addWarningToStatuses(enclosure, isAnimal) {
-    const objectName = isAnimal ? 'ANIMAL' : 'ENCLOSURE';
-    const objectId = isAnimal ? enclosure.getAnimal().getName() : enclosure.getId();
-    const statusString = `${objectName}#${objectId}#WARNING`;
-    this.inspectionStatuses.push(statusString);
-  }
+
 
   reportEnclosureWarningStatus(enclosure) {
     this.reportStatus('ENCLOSURE', enclosure.getId(), 'WARNING');
@@ -74,7 +69,7 @@ class Inspection {
   }
 
   reportNotSafeEnclosureStatus(enclosure) {
-    this.addWarningToStatuses(enclosure, false);
+    this.reportEnclosureWarningStatus(enclosure);
     this.zooWarningStatus = true;
   }
 
@@ -87,12 +82,12 @@ class Inspection {
     const animalStatus = this.imageRecognitionSystem.recognizeAnimalStatus(enclosure.getAnimal(), animalImage);
     if (animalStatus.isAnimalSick()) {
       this.respondToSickAnimal(enclosure);
-      this.reportSickAnimalStatus(enclosure);
+      this.reportSickAnimalStatus(enclosure.getAnimal());
     }
   }
 
-  reportSickAnimalStatus(enclosure) {
-    this.addWarningToStatuses(enclosure, true);
+  reportSickAnimalStatus(animal) {
+    this.reportAnimalWarningStatus(animal);
     this.zooWarningStatus = true;
   }
 
