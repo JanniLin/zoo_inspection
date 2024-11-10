@@ -34,10 +34,17 @@ class Inspection {
   }
 
   reportZooStatus() {
-    this.inspectionStatuses.push(`ZOO#${this.zoo.getId()}#${this.zooWarningStatus ? 'WARNING' : 'OK'}`);
+    const zooStatus = this.zooWarningStatus ? 'WARNING' : 'OK';
+    const zooId = this.zoo.getId();
+    const statusString = `ZOO#${zooId}#${zooStatus}`;
+    this.inspectionStatuses.push(statusString);
   }
+
   addWarningToStatuses(enclosure, isAnimal) {
-    this.inspectionStatuses.push(`${isAnimal ? 'ANIMAL' : 'ENCLOSURE'}#${isAnimal ? enclosure.getAnimal().getName() : enclosure.getId()}#WARNING`);
+    const objectName = isAnimal ? 'ANIMAL' : 'ENCLOSURE';
+    const objectId = isAnimal ? enclosure.getAnimal().getName() : enclosure.getId();
+    const statusString = `${objectName}#${objectId}#WARNING`;
+    this.inspectionStatuses.push(statusString);
   }
 
 
