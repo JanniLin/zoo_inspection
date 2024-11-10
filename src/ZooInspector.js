@@ -34,11 +34,17 @@ class Inspection {
   }
 
   reportZooStatus() {
-    const zooStatus = this.zooWarningStatus ? Inspection.WARNING_STATUS : Inspection.OK_STATUS;
+    const zooStatus = this.isZooInWarningStatus() ? Inspection.WARNING_STATUS : Inspection.OK_STATUS;
     this.reportStatus(Inspection.ZOO_STATUS_NAME, this.zoo.getId(), zooStatus);
 
   }
+  isZooInWarningStatus() {
+    return this.isNotEmptyInspectionStatuses();
+  }
 
+  isNotEmptyInspectionStatuses() {
+    return !!this.inspectionStatuses.length;
+  }
 
 
   reportEnclosureWarningStatus(enclosure) {
