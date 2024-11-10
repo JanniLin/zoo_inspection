@@ -34,19 +34,19 @@ class Inspection {
   }
 
   reportZooStatus() {
-    const zooStatus = this.zooWarningStatus ? 'WARNING' : 'OK';
-    this.reportStatus('ZOO', this.zoo.getId(), zooStatus);
+    const zooStatus = this.zooWarningStatus ? Inspection.WARNING_STATUS : Inspection.OK_STATUS;
+    this.reportStatus(Inspection.ZOO_STATUS_NAME, this.zoo.getId(), zooStatus);
 
   }
 
 
 
   reportEnclosureWarningStatus(enclosure) {
-    this.reportStatus('ENCLOSURE', enclosure.getId(), 'WARNING');
+    this.reportStatus(Inspection.ENCLOSURE_STATUS_NAME, enclosure.getId(), Inspection.WARNING_STATUS);
   }
 
   reportAnimalWarningStatus(animal) {
-    this.reportStatus('ANIMAL', animal.getName(), 'WARNING');
+    this.reportStatus(Inspection.ANIMAL_STATUS_NAME, animal.getName(), Inspection.WARNING_STATUS);
   }
 
   reportStatus(objectName, objectId, status) {
@@ -97,3 +97,8 @@ class Inspection {
   }
 
 }
+Inspection.WARNING_STATUS = 'WARNING';
+Inspection.OK_STATUS = 'OK';
+Inspection.ZOO_STATUS_NAME = 'ZOO';
+Inspection.ENCLOSURE_STATUS_NAME = 'ENCLOSURE';
+Inspection.ANIMAL_STATUS_NAME = 'ANIMAL'
