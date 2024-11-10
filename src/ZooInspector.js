@@ -22,17 +22,23 @@ class Inspection {
   }
 
   runInspection() {
-    // run inspection
+    this.inspectEnclosuresAndAnimals();
+    this.reportZooStatus();
+  }
+
+  inspectEnclosuresAndAnimals() {
     this.zoo.getEnclosures().forEach(enclosure => {
       this.inspectEnclosure(enclosure);
       this.inspectAnimal(enclosure);
     });
-    // report inspection status
+  }
+
+  reportZooStatus() {
     this.inspectionStatuses.push(`ZOO#${this.zoo.getId()}#${this.zooWarningStatus ? 'WARNING' : 'OK'}`);
   }
 
   inspectEnclosure(enclosure) {
-      const enclosureImage = this.makePicture(this.zoo, enclosure, false);
+    const enclosureImage = this.zoo.capturePictureOf(enclosure);
       const enclosureStatus = this.imageRecognitionSystem.recognizeEnclosureStatus(enclosure, enclosureImage);
       if (!enclosureStatus.isEnclosureSafe()) {
         this.zoo.closeEnclosure(enclosure);
@@ -44,7 +50,7 @@ class Inspection {
   }
 
   inspectAnimal(enclosure) {
-    const animalImage = this.makePicture(this.zoo, enclosure, true);
+    const animalImage = this.zoo.capturePictureOf(enclosure.getAnimal());
     const animalStatus = this.imageRecognitionSystem.recognizeAnimalStatus(enclosure.getAnimal(), animalImage);
     if (animalStatus.isAnimalSick()) {
       this.zoo.closeEnclosure(enclosure);
@@ -54,13 +60,6 @@ class Inspection {
     }
   }
 
-  makePicture(zoo, enclosure, isAnimal) {
-    if (isAnimal) {
-      return zoo.capturePictureOf(enclosure.getAnimal());
-    } else {
-      return zoo.capturePictureOf(enclosure);
-    }
-  }
 
   addWarningToStatuses(enclosure, isAnimal) {
     this.inspectionStatuses.push(`${isAnimal ? 'ANIMAL' : 'ENCLOSURE'}#${isAnimal ? enclosure.getAnimal().getName() : enclosure.getId()}#WARNING`);
