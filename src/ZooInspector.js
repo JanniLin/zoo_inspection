@@ -35,9 +35,8 @@ class Inspection {
 
   reportZooStatus() {
     const zooStatus = this.zooWarningStatus ? 'WARNING' : 'OK';
-    const zooId = this.zoo.getId();
-    const statusString = `ZOO#${zooId}#${zooStatus}`;
-    this.inspectionStatuses.push(statusString);
+    this.reportStatus('ZOO', this.zoo.getId(), zooStatus);
+
   }
 
   addWarningToStatuses(enclosure, isAnimal) {
@@ -47,6 +46,17 @@ class Inspection {
     this.inspectionStatuses.push(statusString);
   }
 
+  reportEnclosureWarningStatus(enclosure) {
+    this.reportStatus('ENCLOSURE', enclosure.getId(), 'WARNING');
+  }
+
+  reportAnimalWarningStatus(animal) {
+    this.reportStatus('ANIMAL', animal.getName(), 'WARNING');
+  }
+
+  reportStatus(objectName, objectId, status) {
+    this.inspectionStatuses.push(`${objectName}#${objectId}#${status}`);
+  }
 
   inspectEnclosure(enclosure) {
     const enclosureImage = this.zoo.capturePictureOf(enclosure);
